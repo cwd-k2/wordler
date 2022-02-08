@@ -10,20 +10,7 @@ import {
 import { availableKeys, CharHit } from "./game.ts";
 import type { WordleGame } from "./game.ts";
 
-function colorize(c: CharHit): string {
-  switch (c) {
-    case "not yet":
-      return "⬛";
-    case "not included":
-      return "⬜";
-    case "included":
-      return "🟨";
-    case "exact":
-      return "🟩";
-  }
-}
-
-function colorizeWithEscape([s, c]: [string, CharHit]): string {
+function colorize([s, c]: [string, CharHit]): string {
   s = ` ${s} `;
   switch (c) {
     case "not yet":
@@ -38,16 +25,15 @@ function colorizeWithEscape([s, c]: [string, CharHit]): string {
 }
 
 export function display(s: ReturnType<WordleGame["status"]>): string {
-  let res = "\n";
-  res += `guesses: ${s.guesses}\n`;
-  res += "───────────────\n";
-  res += s.hist.map((l) => l.map(colorizeWithEscape).join("")).join("\n");
-  res += "\n";
-  res += "───────────────\n";
-  availableKeys.forEach((k) => {
-    res += colorizeWithEscape([k, s.chrs.get(k) || "not yet"]);
-    if ("plm".includes(k)) res += "\n";
-  });
+  const history = s.hist.map((l) => l.map(colorize).join("")).join("\n");
+  const keyboard = availableKeys.map((k) =>
+    colorize([k, s.chrs.get(k) || "not yet"]) + ("plm".includes(k) ? "\n" : "")
+  ).join("");
 
-  return res;
+  return `
+guesses: ${s.guesses}
+───────────────
+${history}
+───────────────
+${keyboard}`;
 }

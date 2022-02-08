@@ -59,7 +59,7 @@ export class WordleGame {
   }
 
   guess(word: string): boolean {
-    if (word.length !== 5 || !word.match(/[a-z]{5}/)) {
+    if (word.length !== 5 || !word.match(/^[a-z]{5}$/)) {
       throw Error("Invalid guess");
     }
     if (!this.dict.has(word)) {
