@@ -1,9 +1,11 @@
 import {
+  bgBlack,
   bgBrightGreen,
   bgBrightYellow,
   bgWhite,
   black,
   bold,
+  white,
 } from "https://deno.land/std@0.125.0/fmt/colors.ts";
 import { availableKeys, CharHit } from "./game.ts";
 import type { WordleGame } from "./game.ts";
@@ -22,9 +24,10 @@ function colorize(c: CharHit): string {
 }
 
 function colorizeWithEscape([s, c]: [string, CharHit]): string {
-  s = ` ${s} `
+  s = ` ${s} `;
   switch (c) {
     case "not yet":
+      return bgBlack(white(s));
     case "not included":
       return bgWhite(black(s));
     case "included":
@@ -35,13 +38,15 @@ function colorizeWithEscape([s, c]: [string, CharHit]): string {
 }
 
 export function display(s: ReturnType<WordleGame["status"]>): string {
-  let res = "";
+  let res = "\n";
   res += `guesses: ${s.guesses}\n`;
+  res += "───────────────\n";
   res += s.hist.map((l) => l.map(colorizeWithEscape).join("")).join("\n");
   res += "\n";
+  res += "───────────────\n";
   availableKeys.forEach((k) => {
-    res += `(${k}: ${colorize(s.chrs.get(k) || "not yet")})`;
-    res += "plm".includes(k) ? "\n" : " ";
+    res += colorizeWithEscape([k, s.chrs.get(k) || "not yet"]);
+    if ("plm".includes(k)) res += "\n";
   });
 
   return res;
