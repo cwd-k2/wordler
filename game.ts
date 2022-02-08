@@ -22,7 +22,7 @@ function ord(c: CharHit): number {
 export class WordleGame {
   private guesses: number;
   private done: boolean;
-  private hist: CharHit[][];
+  private hist: [string, CharHit][][];
   private chrs: Map<string, CharHit>;
   private dict: Set<string>;
   private wordle: string;
@@ -48,7 +48,7 @@ export class WordleGame {
 
   status(): {
     readonly guesses: number;
-    readonly hist: CharHit[][];
+    readonly hist: [string, CharHit][][];
     readonly chrs: Map<string, CharHit>;
   } {
     return {
@@ -68,7 +68,7 @@ export class WordleGame {
 
     this.guesses += 1;
 
-    const line: CharHit[] = [];
+    const line: [string, CharHit][] = [];
     for (let i = 0; i < 5; i++) {
       const res: CharHit = word[i] === this.wordle[i]
         ? "exact"
@@ -78,7 +78,7 @@ export class WordleGame {
       if (ord(res) > ord(this.chrs.get(word[i]) || "not yet")) {
         this.chrs.set(word[i], res);
       }
-      line.push(res);
+      line.push([word[i], res]);
     }
     this.hist.push(line);
 
