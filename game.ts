@@ -34,7 +34,7 @@ export class WordleGame {
   ) {
     this.wordle = n !== undefined && 0 <= n && n < wordles.length
       ? wordles[n]
-      : wordles[wordles.length - 1];
+      : wordles[Math.floor(Math.random() * wordles.length)];
     this.dict = dict;
     this.chrs = new Map(availableKeys.map((c) => [c, "not yet"]));
     this.hist = [];
