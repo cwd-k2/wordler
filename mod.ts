@@ -1,7 +1,7 @@
 export * from "./game.ts";
 export * from "./disp.ts";
 
-export const WORDLE_URL = "https://www.powerlanguage.co.uk/wordle";
+export const WORDLE_URL = "https://www.nytimes.com/games/wordle";
 
 // fetch wordles and the valid words for the game
 export async function fetchWordList(): Promise<[string[], Set<string>]> {
